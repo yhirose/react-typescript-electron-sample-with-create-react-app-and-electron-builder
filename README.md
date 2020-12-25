@@ -68,7 +68,7 @@ yarn add @types/electron-devtools-installer electron-devtools-installer electron
 yarn add -D concurrently electron electron-builder wait-on
 ```
 
-### Make Electon main process source file
+### Make Electron main process source file
 
 #### electron/tsconfig.json
 
@@ -79,7 +79,7 @@ yarn add -D concurrently electron electron-builder wait-on
     "module": "commonjs",
     "sourceMap": true,
     "strict": true,
-    "outDir": "../build", # Output transpiled files to build/electron/
+    "outDir": "../build", // Output transpiled files to build/electron/
     "rootDir": "../",
     "noEmitOnError": true,
     "typeRoots": [
