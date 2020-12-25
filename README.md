@@ -79,7 +79,7 @@ yarn add -D concurrently electron electron-builder wait-on
     "module": "commonjs",
     "sourceMap": true,
     "strict": true,
-    "outDir": "../build", # Output transpiled files to build/electron/
+    "outDir": "../build", // Output transpiled files to build/electron/
     "rootDir": "../",
     "noEmitOnError": true,
     "typeRoots": [
