@@ -27,7 +27,12 @@ function createWindow() {
   if (isDev) {
     // 'node_modules/.bin/electronPath'
     require('electron-reload')(__dirname, {
-      electron: path.join(__dirname, '..', '..', 'node_modules', '.bin', 'electron'),
+      electron: path.join(__dirname,
+        '..',
+        '..',
+        'node_modules',
+        '.bin',
+        'electron' + (process.platform === "win32" ? ".cmd" : "")),
       forceHardReset: true,
       hardResetMethod: 'exit'
     });
