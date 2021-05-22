@@ -1,6 +1,6 @@
 {
   "name": "my-app",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "author": "Your Name",
   "description": "React-TypeScript-Electron sample with Create React App and Electron Builder",
   "homepage": ".",

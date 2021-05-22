@@ -1,7 +1,7 @@
 React-TypeScript-Electron sample with Create React App and Electron Builder
 ===========================================================================
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app) with `--typescript`option.
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app) with `--template typescript`option.
 
 On the top of it, the following features have been added with realatively small changes:
 
@@ -62,10 +62,10 @@ my-app/
 ### Generate a React project and install npm dependencies
 
 ```bash
-create-react-app my-app --typescript
+create-react-app my-app --template typescript
 cd my-app
 yarn add @types/electron-devtools-installer electron-devtools-installer electron-is-dev electron-reload
-yarn add -D concurrently electron electron-builder wait-on
+yarn add -D concurrently electron electron-builder wait-on cross-env
 ```
 
 ### Make Electron main process source file
@@ -183,7 +183,7 @@ app.on('activate', () => {
 ```json
   "scripts": {
     "postinstall": "electron-builder install-app-deps",
-    "electron:dev": "concurrently \"BROWSER=none yarn start\" \"wait-on http://localhost:3000 && tsc -p electron -w\" \"wait-on http://localhost:3000 && tsc -p electron && electron .\"",
+    "electron:dev": "concurrently \"cross-env BROWSER=none yarn start\" \"wait-on http://localhost:3000 && tsc -p electron -w\" \"wait-on http://localhost:3000 && tsc -p electron && electron .\"",
     "electron:build": "yarn build && tsc -p electron && electron-builder",
 ```
 
