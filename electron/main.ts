@@ -1,6 +1,5 @@
 import { app, BrowserWindow } from 'electron';
 import * as path from 'path';
-import * as isDev from 'electron-is-dev';
 import installExtension, { REACT_DEVELOPER_TOOLS } from "electron-devtools-installer";
 
 function createWindow() {
@@ -13,16 +12,15 @@ function createWindow() {
     }
   })
 
-  if (isDev) {
-    win.loadURL('http://localhost:3000/index.html');
-  } else {
+  if (app.isPackaged) {
     // 'build/index.html'
     win.loadURL(`file://${__dirname}/../index.html`);
-  }
+  } else {
+    win.loadURL('http://localhost:3000/index.html');
 
-  // Hot Reloading
-  if (isDev) {
-    // 'node_modules/.bin/electronPath'
+    win.webContents.openDevTools();
+
+    // Hot Reloading on 'node_modules/.bin/electronPath'
     require('electron-reload')(__dirname, {
       electron: path.join(__dirname,
         '..',
@@ -33,10 +31,6 @@ function createWindow() {
       forceHardReset: true,
       hardResetMethod: 'exit'
     });
-  }
-
-  if (isDev) {
-    win.webContents.openDevTools();
   }
 }
 
