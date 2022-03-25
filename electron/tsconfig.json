@@ -9,6 +9,7 @@
     "noEmitOnError": true,
     "typeRoots": [
       "node_modules/@types"
-    ]
+    ],
+    "allowJs": true
   }
 }

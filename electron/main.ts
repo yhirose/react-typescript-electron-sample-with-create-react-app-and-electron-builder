@@ -1,16 +1,19 @@
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, ipcMain } from 'electron';
 import * as path from 'path';
 import installExtension, { REACT_DEVELOPER_TOOLS } from "electron-devtools-installer";
+import * as ClientHandlers from './tcp_client';
 
 function createWindow() {
   const win = new BrowserWindow({
     width: 800,
     height: 600,
     webPreferences: {
-      // contextIsolation: false,
+      contextIsolation: true,
       preload: path.join(__dirname, 'preload.js')
     }
   })
+
+  win.loadURL(path.join(__dirname, 'preload.js'))
 
   if (app.isPackaged) {
     // 'build/index.html'
@@ -52,5 +55,10 @@ app.whenReady().then(() => {
     if (process.platform !== 'darwin') {
       app.quit();
     }
+  });
+  
+  ClientHandlers.setupClient('localhost', '9090');
+  ipcMain.on('SEND_DATA', (e, payload) => {
+    ClientHandlers.sendDataToServer(payload);
   });
 });

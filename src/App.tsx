@@ -1,8 +1,13 @@
-import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import logo from './logo.svg';
+import React, { useEffect } from 'react';
+
 
 function App() {
+  useEffect(() => {
+    window.backendAPI.sendData('ping');
+  }, []);
+
   return (
     <div className="App">
       <header className="App-header">
