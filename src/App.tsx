@@ -1,5 +1,6 @@
 import './App.css';
 import logo from './logo.svg';
+import { Buffer } from 'buffer';
 import React, { useEffect, useState } from 'react';
 
 const HOST = "127.0.0.1";
@@ -17,7 +18,8 @@ function App() {
   useEffect(() => {
     connect();
     window.backendAPI.onDataReceived(data => {
-      setRecvBuffer(data.buff?.data.toString('utf8'));
+      const b = Buffer.from(data.buff?.data);
+      setRecvBuffer(b.toString('utf8'));
     });
   }, []);
 
