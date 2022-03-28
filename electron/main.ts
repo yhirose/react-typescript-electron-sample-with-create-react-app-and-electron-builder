@@ -35,6 +35,11 @@ function createWindow() {
       hardResetMethod: 'exit'
     });
   }
+
+  ClientHandlers.events.on('data', (data) => {
+    //console.log(data);
+    win.webContents.send('DATA_RECEIVED', data);
+  });
 }
 
 app.whenReady().then(() => {
@@ -57,8 +62,12 @@ app.whenReady().then(() => {
     }
   });
   
-  ClientHandlers.setupClient('localhost', '9090');
   ipcMain.on('SEND_DATA', (e, payload) => {
     ClientHandlers.sendDataToServer(payload);
   });
+
+  ipcMain.on('CONNECT_TO_SERVER', (e, payload) => {
+    ClientHandlers.setupClient(payload.host, payload.port);
+  });
+
 });
