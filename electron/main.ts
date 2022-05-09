@@ -1,7 +1,9 @@
 import { app, BrowserWindow, ipcMain } from 'electron';
 import * as path from 'path';
 import installExtension, { REACT_DEVELOPER_TOOLS } from "electron-devtools-installer";
-import * as ClientHandlers from './tcp_client';
+import { TCPClient } from './tcp_client';
+
+const ClientHandlers = new TCPClient()
 
 function createWindow() {
   const win = new BrowserWindow({
@@ -36,9 +38,14 @@ function createWindow() {
     });
   }
 
-  ClientHandlers.events.on('data', (data) => {
+  ClientHandlers.on('data', (data) => {
     //console.log(data);
     win.webContents.send('DATA_RECEIVED', data);
+  });
+
+  ClientHandlers.on('error', (error) => {
+    console.log(error);
+    win.webContents.send('ERROR_RECEIVED', error);
   });
 }
 
@@ -63,7 +70,7 @@ app.whenReady().then(() => {
   });
   
   ipcMain.on('SEND_DATA', (e, payload) => {
-    ClientHandlers.sendDataToServer(payload);
+    ClientHandlers.sendToServer(payload);
   });
 
   ipcMain.on('CONNECT_TO_SERVER', (e, payload) => {

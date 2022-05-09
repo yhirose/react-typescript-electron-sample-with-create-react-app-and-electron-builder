@@ -1,51 +1,84 @@
 const EventEmitter = require('events');
-const fork = require('child_process').fork;
+import { Socket } from 'net';
+class TCPClient extends EventEmitter {
+    constructor() {
+        super();
+        this.client = null;
+        this.addr = '';
+        this.port = null;
 
-// set tcp things into an individual process.
-const tcpProcess = fork('./electron/tcp_client/client.js');
+        function onExit() {
+            console.log('Exiting...');
+            if (this.client && !this.client.destroyed) {
+                this.client.destroy();
+            }
+            process.exit(0);
+        }
+        process.on('exit', onExit);
+    }
 
-const SEND_DATA = 'SEND_DATA';
-const SETUP_CLIENT = 'SETUP_CLIENT';
-const events = new EventEmitter();
+    // setup client
+    setupClient(addr, port) {
+        if (this.client && !this.client.destroyed) {
+            this.client.destroy();
+        }
+        this.addr = addr;
+        this.port = port;
+    }
 
+    // callback of receive data
+    onReceiveData(buff) {
+        try {
+            //console.log('onReceiveData', buff);
+            this.emit('data', { buff: buff });
+        } catch (e) {
+            this.bufList = [];
+            this.totalLenth = 0;
+            this.emit('error', { type: "TCP_CLIENT_ERROR", message: e.message });
+        }
+    }
 
-function onExit() {
-    tcpProcess.kill('SIGINT');
-    process.exit(0);
+    // init socket
+    initConnToServer() {
+        if (!this.client) {
+            this.client = new Socket();
+            this.client.on('data', (chunck) => {
+                try {
+                    this.onReceiveData(chunck);
+                } catch (e) {
+                    this.emit('error', { type: "TCP_CLIENT_ERROR", message: e.message });
+                }
+            });
+            this.client.on('error', (err) => {
+                this.emit('error', { type: 'TCP_CONNECTION_ERROR', message: `Connection error: ${err.message}. Attempting to reconnect!` });
+                setTimeout(() => this.initConnToServer(), 2000);
+            });
+            if (!this.client.connecting) {
+                this.client.connect(this.port, this.addr);
+            }
+        }
+
+        if (this.client.destroyed) {
+            this.client.connect(this.port, this.addr);
+        }
+    }
+
+    connect() {
+        if (!this.client || this.client.destroyed) {
+            this.initConnToServer();
+        }
+    }
+
+    sendToServer(requestObj) {
+        if (!this.client || this.client.destroyed) {
+            this.initConnToServer();
+        }
+        if (requestObj && requestObj.length > 0) {
+            this.client.write(requestObj);
+        }
+    }
 }
 
-process.on('exit', onExit);
-
-tcpProcess.on('message', (res) => {
-    // add your own handlers
-    console.log(res); // eslint-disable-line no-console
-    try {
-        switch (res.type) {
-            case 'MESSAGE_FROM_SERVER':
-                {
-                    events.emit('data', res.payload);
-                    break;
-                }
-            default:
-                throw new Error('Unrecognized message received by tcp server');
-        }
-    } catch (e) {
-        console.log(e); // eslint-disable-line no-console
-    }
-});
-
-module.exports = {
-    events,
-    // init tcp client
-    setupClient: (addr, port) => {
-        tcpProcess.send({ type: SETUP_CLIENT, payload: { addr, port } });
-    },
-    // Connect to server
-    connect: () => {
-        tcpProcess.send({ type: CONNECT, payload: 'connect' });
-    },
-    // send string or buffer to server
-    sendDataToServer: (data) => {
-        tcpProcess.send({ type: SEND_DATA, payload: data });
-    },
-};
+export {
+    TCPClient
+}

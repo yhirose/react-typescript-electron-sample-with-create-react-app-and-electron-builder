@@ -17,7 +17,6 @@
         "@types/react": "^17.0.39",
         "@types/react-dom": "^17.0.11",
         "buffer": "^6.0.3",
-        "electron": "^17.2.0",
         "electron-devtools-installer": "^3.2.0",
         "electron-reload": "^1.5.0",
         "react": "^17.0.2",
@@ -65,6 +64,7 @@
     "devDependencies": {
         "concurrently": "^7.0.0",
         "cross-env": "^7.0.3",
+        "electron": "^17.2.0",
         "electron-builder": "^22.14.13",
         "wait-on": "^6.0.1"
     }
