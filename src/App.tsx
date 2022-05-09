@@ -18,8 +18,15 @@ function App() {
   useEffect(() => {
     connect();
     window.backendAPI.onDataReceived(data => {
-      const b = Buffer.from(data.buff?.data);
+      const b = Buffer.from(data?.buff)
       setRecvBuffer(b.toString('utf8'));
+    });
+    window.backendAPI.onErrorReceived((error) => {
+      if (error.type === "TCP_CONNECTION_ERROR") {
+        console.log("TCP_CONNECTION_ERROR")
+      } else if (error.type === "TCP_CLIENT_ERROR") {
+        console.log("TCP_CLIENT_ERROR", error.message)
+      }
     });
   }, []);
 
