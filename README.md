@@ -62,7 +62,7 @@ my-app/
 ### Generate a React project and install npm dependencies
 
 ```bash
-create-react-app my-app --template typescript
+npx create-react-app my-app --template typescript
 cd my-app
 yarn add @types/electron-devtools-installer electron-devtools-installer electron-is-dev electron-reload
 yarn add -D concurrently electron electron-builder wait-on cross-env
