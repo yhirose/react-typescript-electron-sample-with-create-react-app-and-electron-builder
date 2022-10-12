@@ -3,11 +3,11 @@ React-TypeScript-Electron sample with Create React App and Electron Builder
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app) with `--template typescript`option.
 
-On the top of it, the following features have been added with realatively small changes:
+On the top of it, the following features have been added with relatively small changes:
 
 * TypeScript supports for Electron main process source code
-* Hot-relaod support for Electron app
-* Electron Bulder support
+* Hot-reload support for Electron app
+* Electron Builder support
 
 ## Available Scripts in addition to the existing ones
 
@@ -50,7 +50,7 @@ my-app/
 │   └── electron/
 │      └── main.js
 │
-## distribution packges
+## distribution packages
 └── dist/
     ├── mac/
     │   └── my-app.app
