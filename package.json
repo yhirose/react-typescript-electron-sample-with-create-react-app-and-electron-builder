@@ -62,7 +62,7 @@
   "devDependencies": {
     "concurrently": "^7.6.0",
     "cross-env": "^7.0.3",
-    "electron": "^23.3.13",
+    "electron": "^28.3.2",
     "electron-builder": "^23.6.0",
     "wait-on": "^7.0.1"
   }
